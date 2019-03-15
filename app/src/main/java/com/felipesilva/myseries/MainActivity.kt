@@ -1,8 +1,13 @@
 package com.felipesilva.myseries
 
+import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import com.bumptech.glide.GlideBuilder
+import com.bumptech.glide.annotation.GlideModule
+import com.bumptech.glide.load.engine.cache.InternalCacheDiskCacheFactory
+import com.bumptech.glide.module.AppGlideModule
 import com.felipesilva.myseries.adapter.ShowCardAdapter
 import com.felipesilva.myseries.data.Shows
 import com.felipesilva.myseries.mvp.MVP
@@ -24,6 +29,7 @@ class MainActivity : AppCompatActivity(), MVP.MainViewImpl {
 
         initializeInstances()
         mainPresenter.listCardsShows()
+        YourAppGlideModule()
     }
 
     private fun initializeInstances() {
@@ -41,5 +47,13 @@ class MainActivity : AppCompatActivity(), MVP.MainViewImpl {
 
         listShows.addAll(shows)
         recyclerView.adapter?.notifyDataSetChanged()
+    }
+
+    @GlideModule
+    inner class YourAppGlideModule : AppGlideModule() {
+        override fun applyOptions(context: Context, builder: GlideBuilder) {
+            val diskCacheSizeBytes = (1024 * 1024 * 150).toLong() // 100 MB
+            builder.setDiskCache(InternalCacheDiskCacheFactory(context, diskCacheSizeBytes))
+        }
     }
 }
