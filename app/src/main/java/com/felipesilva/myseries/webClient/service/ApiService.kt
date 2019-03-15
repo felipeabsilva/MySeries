@@ -1,4 +1,4 @@
-package com.felipesilva.myseries
+package com.felipesilva.myseries.webClient.service
 
 import com.felipesilva.myseries.data.Shows
 import retrofit2.Call
