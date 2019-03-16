@@ -1,5 +1,6 @@
 package com.felipesilva.myseries.adapter
 
+import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -24,21 +25,27 @@ class ShowCardAdapter(private val shows: MutableList<Shows>) : RecyclerView.Adap
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val show = shows[position].show
 
-        show.image?.let {
-            Glide
-                .with(holder.imageViewPoster.context)
-                .load(it.medium)
-                .into(holder.imageViewPoster)
-        }
-
-        holder.textViewTitle.text = show.name
-        holder.textViewGenres.text = show.genres.toString()
+        if (holder is ViewHolder)
+            holder.bind(show)
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val cardView : CardView = itemView.card_show
         val imageViewPoster: ImageView = itemView.image_show_poster
         val textViewTitle: TextView = itemView.text_show_title
         val textViewGenres: TextView = itemView.text_show_genres
+
+        fun bind(show: Show) {
+            show.image?.let {
+                Glide
+                    .with(imageViewPoster.context)
+                    .load(it.medium)
+                    .into(imageViewPoster)
+            }
+
+            textViewTitle.text = show.name
+            textViewGenres.text = show.genres.toString()
+        }
     }
 
 }

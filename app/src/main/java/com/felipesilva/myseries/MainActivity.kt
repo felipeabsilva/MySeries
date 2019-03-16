@@ -4,6 +4,7 @@ import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log.d
 import com.bumptech.glide.GlideBuilder
 import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.load.engine.cache.InternalCacheDiskCacheFactory
@@ -46,6 +47,8 @@ class MainActivity : AppCompatActivity(), MVP.MainViewImpl {
             listShows.clear()
 
         listShows.addAll(shows)
+        d("123felipe", "${shows[0].show.premiered}")
+        d("123felipe", "${shows[0].show.summary}")
         recyclerView.adapter?.notifyDataSetChanged()
     }
 
