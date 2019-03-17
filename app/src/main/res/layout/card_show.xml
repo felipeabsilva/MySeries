@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_show"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="2dp">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp">
+        android:layout_height="150dp"
+        android:background="@drawable/card_style">
 
         <ImageView
             android:id="@+id/image_show_poster"
@@ -17,8 +20,10 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:adjustViewBounds="true"
-            android:padding="6dp"
-            android:src="@drawable/movie_stock_picture"/>
+            android:padding="2dp"
+            android:layout_margin="4dp"
+            android:src="@drawable/ic_app_stock"
+            android:background="@drawable/card_image_view_style"/>
 
         <TextView
             android:id="@+id/text_show_title"
@@ -27,10 +32,10 @@
             app:layout_constraintLeft_toRightOf="@+id/image_show_poster"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:textColor="@color/colorAccent"
+            android:textColor="#FFFFFF"
             android:textSize="22sp"
             android:padding="6dp"
-            android:text="Velozes e Furiosos"/>
+            tools:text="Velozes e Furiosos"/>
 
         <TextView
             android:id="@+id/text_show_genres"
@@ -39,10 +44,10 @@
             app:layout_constraintLeft_toRightOf="@+id/image_show_poster"
             app:layout_constraintTop_toBottomOf="@+id/text_show_title"
             app:layout_constraintRight_toRightOf="parent"
-            android:textColor="@color/colorAccent"
+            android:textColor="#FFFFFF"
             android:padding="6dp"
             android:textSize="18sp"
-            android:text="Ação, Comédia"/>
+            tools:text="Ação, Comédia"/>
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/icon_favorite_show"

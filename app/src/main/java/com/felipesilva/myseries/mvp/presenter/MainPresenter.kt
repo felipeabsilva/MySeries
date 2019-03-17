@@ -43,7 +43,6 @@ class MainPresenter private constructor() : MVP.MainPresenterImpl {
 
         if (listShows.isNotEmpty()) {
             mainView.showData(listShows)
-            hideKeyboard(mainView.getActivity())
         } else
             showMessage("Busca não encontrada!")
     }
@@ -70,13 +69,5 @@ class MainPresenter private constructor() : MVP.MainPresenterImpl {
     }
 
     override fun loadFavorites(): MutableSet<String> = FavoriteShow.getFavorites(mainView.getActivity())
-
-    override fun hideKeyboard(activity: Activity) {
-        val view = activity.currentFocus
-        view?.let {
-            val inputMethodManager = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
-        }
-    }
 
 }

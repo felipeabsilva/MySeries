@@ -22,6 +22,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity(), MVP.MainViewImpl {
     private lateinit var mainPresenter : MVP.MainPresenterImpl
     private val listShows = mutableListOf<Shows>()
+    private lateinit var searchView: SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +53,8 @@ class MainActivity : AppCompatActivity(), MVP.MainViewImpl {
 
         listShows.addAll(shows)
 
+        searchView.onActionViewCollapsed()
+
         recyclerView.adapter?.notifyDataSetChanged()
     }
 
@@ -61,7 +64,7 @@ class MainActivity : AppCompatActivity(), MVP.MainViewImpl {
         val searchItem = menu.findItem(R.id.search_button_menu)
 
         searchItem?.let {
-            val searchView = searchItem.actionView as SearchView
+            searchView = searchItem.actionView as SearchView
             searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     query?.let {

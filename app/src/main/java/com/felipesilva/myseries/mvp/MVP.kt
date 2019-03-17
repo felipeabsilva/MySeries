@@ -19,12 +19,10 @@ interface MVP {
         fun searchCardShows(search: String)
         fun showMessage(message: String)
         fun loadFavorites(): MutableSet<String>
-        fun hideKeyboard(activity: Activity)
     }
 
     interface MainModelImpl {
         fun loadData()
         fun loadDataWithParameter(search: String)
-
     }
 }
