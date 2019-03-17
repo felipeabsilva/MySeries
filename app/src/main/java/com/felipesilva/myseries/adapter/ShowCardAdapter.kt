@@ -16,7 +16,7 @@ import com.felipesilva.myseries.data.Shows
 import com.felipesilva.myseries.mvp.view.DetailsShowActivity
 import kotlinx.android.synthetic.main.card_show.view.*
 
-class ShowCardAdapter(private val shows: MutableList<Shows>, private val favoriteList: MutableList<String>) : RecyclerView.Adapter<CardViewHolder>() {
+class ShowCardAdapter(private val shows: MutableList<Shows>, private val listFavorite: MutableSet<String>) : RecyclerView.Adapter<CardViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.card_show, parent, false)
         return CardViewHolder(view)
@@ -27,10 +27,9 @@ class ShowCardAdapter(private val shows: MutableList<Shows>, private val favorit
 
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
         val show = shows[position].show
-        val favorite = favoriteList.filter { equals(show.name) }.any()
 
         if (holder is CardViewHolder)
-            holder.bind(show, favorite)
+            holder.bind(show, listFavorite)
     }
 
 }

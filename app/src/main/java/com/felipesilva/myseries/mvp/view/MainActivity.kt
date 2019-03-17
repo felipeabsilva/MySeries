@@ -5,8 +5,8 @@ import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.widget.SearchView
 import android.util.Log.d
+import android.widget.SearchView
 import android.view.Menu
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -20,12 +20,14 @@ import com.felipesilva.myseries.data.Shows
 import com.felipesilva.myseries.mvp.MVP
 import com.felipesilva.myseries.mvp.presenter.MainPresenter
 import kotlinx.android.synthetic.main.activity_main.*
-import java.io.*
+import java.io.File
+import java.io.FileOutputStream
+import java.io.ObjectOutputStream
 
 class MainActivity : AppCompatActivity(), MVP.MainViewImpl {
     private lateinit var mainPresenter : MainPresenter
     private val listShows = mutableListOf<Shows>()
-    val favoriteList = mutableListOf<String>()
+    private val listFavorite = mutableSetOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,13 +35,12 @@ class MainActivity : AppCompatActivity(), MVP.MainViewImpl {
 
         recycler_view.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = ShowCardAdapter(listShows)
+            adapter = ShowCardAdapter(listShows, listFavorite)
         }
 
+        YourAppGlideModule()
         initializeInstances()
         mainPresenter.listCardsShows()
-        YourAppGlideModule()
-        loadFavorites()
     }
 
     private fun initializeInstances() {
@@ -64,6 +65,8 @@ class MainActivity : AppCompatActivity(), MVP.MainViewImpl {
             listShows.clear()
 
         listShows.addAll(shows)
+        listFavorite.addAll(mainPresenter.loadFavorites())
+        d("123","${listFavorite.size}")
 
         recyclerView.adapter?.notifyDataSetChanged()
     }
@@ -104,42 +107,5 @@ class MainActivity : AppCompatActivity(), MVP.MainViewImpl {
             val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
         }
-    }
-
-    fun loadFavorites() : MutableList<String> {
-        val FILE_NAME = "favorite_list"
-        val file : File = getFileStreamPath(FILE_NAME)
-
-        if (file.exists()) {
-            val fis = FileInputStream(file)
-            val ois = ObjectInputStream(fis)
-
-            val retorno = ois.readObject() as MutableList<String>
-
-            if(retorno is MutableList<String>)
-                if (favoriteList.isNotEmpty()) {
-                    favoriteList.clear()
-                    favoriteList.addAll(retorno)
-                }
-
-            fis.close()
-            ois.close()
-        }
-
-        return favoriteList
-    }
-
-    fun favoriteShow(name: String) {
-        val FILE_NAME = "favorite_list"
-        val file : File = getFileStreamPath(FILE_NAME)
-
-        favoriteList.add(name)
-
-        val fos = FileOutputStream(file)
-        val oos = ObjectOutputStream(fos)
-
-        oos.writeObject(favoriteList)
-        oos.close()
-        fos.close()
     }
 }

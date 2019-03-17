@@ -18,6 +18,7 @@ class DetailsShowActivity : AppCompatActivity() {
         val genres = intent.getStringExtra("genres")
         val release = intent.getStringExtra("release")
         val summary = intent.getStringExtra("summary")
+        val favorite = intent.getBooleanExtra("favorite", false)
 
         setupActionBar(title)
 
@@ -32,6 +33,11 @@ class DetailsShowActivity : AppCompatActivity() {
         text_show_genres_details.text = genres
         text_show_release_details.text = release
         text_show_summary_details.text = summary
+
+        if (favorite)
+            icon_favorite_show_details.setImageResource(R.drawable.ic_favorite_applied)
+        else
+            icon_favorite_show_details.setImageResource(R.drawable.ic_favorite_not_applied)
     }
 
     private fun setupActionBar(it: String) {
