@@ -1,5 +1,6 @@
 package com.felipesilva.myseries.mvp.view
 
+import android.app.Activity
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -7,6 +8,9 @@ import android.support.v7.widget.LinearLayoutManager
 import android.widget.SearchView
 import android.util.Log.d
 import android.view.Menu
+import android.view.inputmethod.InputMethod
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import com.bumptech.glide.GlideBuilder
 import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.load.engine.cache.InternalCacheDiskCacheFactory
@@ -58,8 +62,7 @@ class MainActivity : AppCompatActivity(), MVP.MainViewImpl {
             listShows.clear()
 
         listShows.addAll(shows)
-        d("123felipe", "Dia ${shows[0].show.premiered}")
-        d("123felipe", "${shows[0].show.summary}")
+
         recyclerView.adapter?.notifyDataSetChanged()
     }
 
@@ -87,5 +90,17 @@ class MainActivity : AppCompatActivity(), MVP.MainViewImpl {
         }
 
         return super.onCreateOptionsMenu(menu)
+    }
+
+    fun showMessage(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    }
+
+    fun hideKeyboard() {
+        val view = this.currentFocus
+        view?.let {
+            val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+        }
     }
 }

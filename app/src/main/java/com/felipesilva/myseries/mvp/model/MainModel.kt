@@ -47,7 +47,7 @@ class MainModel private constructor() {
             }
 
             override fun onFailure(call: Call<MutableList<Shows>>, t: Throwable) {
-                Log.d("123felipe", "onFailure")
+                mainPresenter.showMessage("A conexão falhou, tente novamente.")
             }
         })
     }
@@ -66,7 +66,7 @@ class MainModel private constructor() {
             }
 
             override fun onFailure(call: Call<MutableList<Shows>>, t: Throwable) {
-                Log.d("123felipe", "onFailure")
+                mainPresenter.showMessage("A conexão falhou, tente novamente.")
             }
         })
     }

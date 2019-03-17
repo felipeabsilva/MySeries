@@ -1,5 +1,6 @@
 package com.felipesilva.myseries.mvp.presenter
 
+import android.util.Log.d
 import com.felipesilva.myseries.mvp.view.MainActivity
 import com.felipesilva.myseries.data.Shows
 import com.felipesilva.myseries.mvp.model.MainModel
@@ -54,7 +55,14 @@ class MainPresenter private constructor() {
         if (shows is MutableList<Shows>)
             listShows.addAll(shows)
 
-        if (listShows.isNotEmpty())
+        if (listShows.isNotEmpty()) {
             mainView.showData(listShows)
+            mainView.hideKeyboard()
+        } else
+            showMessage("Busca não encontrada!")
+    }
+
+    fun showMessage(message: String) {
+        mainView.showMessage(message)
     }
 }
