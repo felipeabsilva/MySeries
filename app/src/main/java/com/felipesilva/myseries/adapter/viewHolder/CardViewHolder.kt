@@ -30,12 +30,13 @@ class CardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         else
             imageViewFavorite.setImageResource(R.drawable.ic_favorite_not_applied)
 
-        show.image?.let {
+        if (show.image?.medium != null) {
             Glide
                 .with(imageViewPoster.context)
-                .load(it.medium)
+                .load(show.image.medium)
                 .into(imageViewPoster)
-        }
+        } else
+            imageViewPoster.setImageResource(R.drawable.ic_app_stock)
 
         formatGenres(show.genres).apply {
             if (equals("Not assigned"))

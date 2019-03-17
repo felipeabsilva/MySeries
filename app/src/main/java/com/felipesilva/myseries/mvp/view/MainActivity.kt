@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
+import android.view.View
 import android.widget.SearchView
 import android.widget.Toast
 import com.bumptech.glide.GlideBuilder
@@ -46,16 +47,14 @@ class MainActivity : AppCompatActivity(), MVP.MainViewImpl {
     }
 
     override fun showData(shows: MutableList<Shows>) {
-        val recyclerView = recycler_view
-
         if (listShows.isNotEmpty())
             listShows.clear()
 
         listShows.addAll(shows)
-
         searchView.onActionViewCollapsed()
 
-        recyclerView.adapter?.notifyDataSetChanged()
+        setRecyclerAndProgressViewVisibility(View.VISIBLE, View.GONE)
+        recycler_view.adapter?.notifyDataSetChanged()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -68,6 +67,7 @@ class MainActivity : AppCompatActivity(), MVP.MainViewImpl {
             searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     query?.let {
+                        setRecyclerAndProgressViewVisibility(View.GONE, View.VISIBLE)
                         mainPresenter.searchCardShows(query)
                     }
 
@@ -108,7 +108,11 @@ class MainActivity : AppCompatActivity(), MVP.MainViewImpl {
     }
 
     private fun reloadData() {
-        val recyclerView = recycler_view
-        recyclerView.adapter?.notifyDataSetChanged()
+        recycler_view.adapter?.notifyDataSetChanged()
+    }
+
+    override fun setRecyclerAndProgressViewVisibility(recyclerVisibility: Int, progressVisibility: Int) {
+        recycler_view.visibility = recyclerVisibility
+        progress_bar.visibility = progressVisibility
     }
 }

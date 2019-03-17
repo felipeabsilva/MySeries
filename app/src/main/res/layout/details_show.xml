@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:padding="6dp"
             tools:text="Título do show"
-            android:textColor="#FFF"
+            android:textColor="@color/whiteColor"
             android:textSize="22sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/image_show_poster_details"
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:padding="6dp"
             tools:text="Generos do show"
-            android:textColor="#FFF"
+            android:textColor="@color/whiteColor"
             android:textSize="18sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_show_title_details" />
@@ -60,7 +60,7 @@
             android:layout_height="wrap_content"
             android:padding="6dp"
             tools:text="Data de lançamento do show"
-            android:textColor="#FFF"
+            android:textColor="@color/whiteColor"
             android:textSize="18sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_show_genres_details" />
@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:padding="6dp"
             tools:text="Sinopse do show"
-            android:textColor="#FFF"
+            android:textColor="@color/whiteColor"
             android:textSize="18sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_show_release_details" />

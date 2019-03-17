@@ -32,7 +32,7 @@
             app:layout_constraintLeft_toRightOf="@+id/image_show_poster"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/whiteColor"
             android:textSize="22sp"
             android:padding="6dp"
             tools:text="Velozes e Furiosos"/>
@@ -44,7 +44,7 @@
             app:layout_constraintLeft_toRightOf="@+id/image_show_poster"
             app:layout_constraintTop_toBottomOf="@+id/text_show_title"
             app:layout_constraintRight_toRightOf="parent"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/whiteColor"
             android:padding="6dp"
             android:textSize="18sp"
             tools:text="Ação, Comédia"/>

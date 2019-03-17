@@ -9,6 +9,7 @@ interface MVP {
         fun getActivity() : Activity
         fun showData(shows: MutableList<Shows>)
         fun showMessage(message: String)
+        fun setRecyclerAndProgressViewVisibility(recyclerVisibility: Int, progressVisibility: Int)
     }
 
     interface MainPresenterImpl {

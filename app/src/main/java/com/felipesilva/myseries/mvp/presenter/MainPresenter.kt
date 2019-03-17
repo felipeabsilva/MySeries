@@ -1,12 +1,15 @@
 package com.felipesilva.myseries.mvp.presenter
 
 import android.app.Activity
+import android.view.View
 import android.view.inputmethod.InputMethodManager
+import com.felipesilva.myseries.R
 import com.felipesilva.myseries.data.Shows
 import com.felipesilva.myseries.features.FavoriteShow
 import com.felipesilva.myseries.mvp.MVP
 import com.felipesilva.myseries.mvp.model.MainModel
 import com.felipesilva.myseries.mvp.view.MainActivity
+import kotlinx.android.synthetic.main.activity_main.view.*
 
 class MainPresenter private constructor() : MVP.MainPresenterImpl {
     private lateinit var mainModel: MainModel
@@ -43,8 +46,10 @@ class MainPresenter private constructor() : MVP.MainPresenterImpl {
 
         if (listShows.isNotEmpty()) {
             mainView.showData(listShows)
-        } else
+        } else {
+            mainView.setRecyclerAndProgressViewVisibility(View.VISIBLE, View.GONE)
             showMessage("Busca não encontrada!")
+        }
     }
 
     override fun initializeModelInstance() {

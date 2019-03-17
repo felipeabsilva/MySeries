@@ -6,4 +6,5 @@
     <color name="primaryColor">#585858</color>
     <color name="secondaryColor">#444444</color>
     <color name="lightColor">#DADADA</color>
+    <color name="whiteColor">#FFF</color>
 </resources>
