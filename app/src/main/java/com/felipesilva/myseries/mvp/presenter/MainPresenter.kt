@@ -1,7 +1,6 @@
 package com.felipesilva.myseries.mvp.presenter
 
-import android.util.Log.d
-import com.felipesilva.myseries.MainActivity
+import com.felipesilva.myseries.mvp.view.MainActivity
 import com.felipesilva.myseries.data.Shows
 import com.felipesilva.myseries.mvp.model.MainModel
 
@@ -43,8 +42,15 @@ class MainPresenter private constructor() {
         mainModel.loadData()
     }
 
+    fun searchCardShows(search: String){
+        mainModel.loadDataWithParameter(search)
+    }
+
     @Synchronized
     fun loadData(shows: MutableList<Shows>?) {
+        if (listShows.isNotEmpty())
+            listShows.clear()
+
         if (shows is MutableList<Shows>)
             listShows.addAll(shows)
 

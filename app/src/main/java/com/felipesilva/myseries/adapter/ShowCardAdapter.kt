@@ -1,5 +1,6 @@
 package com.felipesilva.myseries.adapter
 
+import android.content.Intent
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -9,43 +10,26 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.felipesilva.myseries.R
+import com.felipesilva.myseries.adapter.viewHolder.CardViewHolder
 import com.felipesilva.myseries.data.Show
 import com.felipesilva.myseries.data.Shows
+import com.felipesilva.myseries.mvp.view.DetailsShowActivity
 import kotlinx.android.synthetic.main.card_show.view.*
 
-class ShowCardAdapter(private val shows: MutableList<Shows>) : RecyclerView.Adapter<ShowCardAdapter.ViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+class ShowCardAdapter(private val shows: MutableList<Shows>) : RecyclerView.Adapter<CardViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.card_show, parent, false)
-        return ViewHolder(view)
+        return CardViewHolder(view)
 
     }
 
     override fun getItemCount() = shows.size
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
         val show = shows[position].show
 
-        if (holder is ViewHolder)
+        if (holder is CardViewHolder)
             holder.bind(show)
-    }
-
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val cardView : CardView = itemView.card_show
-        val imageViewPoster: ImageView = itemView.image_show_poster
-        val textViewTitle: TextView = itemView.text_show_title
-        val textViewGenres: TextView = itemView.text_show_genres
-
-        fun bind(show: Show) {
-            show.image?.let {
-                Glide
-                    .with(imageViewPoster.context)
-                    .load(it.medium)
-                    .into(imageViewPoster)
-            }
-
-            textViewTitle.text = show.name
-            textViewGenres.text = show.genres.toString()
-        }
     }
 
 }

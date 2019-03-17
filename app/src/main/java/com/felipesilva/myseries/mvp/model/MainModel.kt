@@ -51,4 +51,23 @@ class MainModel private constructor() {
             }
         })
     }
+
+    @Synchronized
+    fun loadDataWithParameter(search: String) {
+        val retrofit = RetrofitConfig.getInstance()
+
+        val api = retrofit.buildRetrofit()
+            .create(ApiService::class.java)
+
+
+        api.searchParameter(search).enqueue(object : Callback<MutableList<Shows>> {
+            override fun onResponse(call: Call<MutableList<Shows>>, response: Response<MutableList<Shows>>) {
+                mainPresenter.loadData(response.body())
+            }
+
+            override fun onFailure(call: Call<MutableList<Shows>>, t: Throwable) {
+                Log.d("123felipe", "onFailure")
+            }
+        })
+    }
 }
