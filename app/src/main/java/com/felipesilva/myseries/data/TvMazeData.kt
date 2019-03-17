@@ -1,5 +1,6 @@
 package com.felipesilva.myseries.data
 
+import java.io.Serializable
 import java.util.*
 
 data class Shows(

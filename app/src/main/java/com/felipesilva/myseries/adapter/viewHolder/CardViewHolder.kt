@@ -18,16 +18,17 @@ class CardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val imageViewPoster: ImageView = itemView.image_show_poster
     val textViewTitle: TextView = itemView.text_show_title
     val textViewGenres: TextView = itemView.text_show_genres
+    val imageViewFavorite: ImageView = itemView.icon_favorite_show
 
-    fun bind(show: Show) {
+    fun bind(show: Show, favorite: Boolean) {
+        textViewTitle.text = show.name
+
         show.image?.let {
             Glide
                 .with(imageViewPoster.context)
                 .load(it.medium)
                 .into(imageViewPoster)
         }
-
-        textViewTitle.text = show.name
 
         formatGenres(show.genres).apply {
             if (equals("Not assigned"))
@@ -49,6 +50,10 @@ class CardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             intent.putExtra("summary", formatSummary("Synopsis: ${formatSummary(show.summary)}"))
 
             it.context.startActivity(intent)
+        }
+
+        imageViewFavorite.setOnClickListener {
+
         }
     }
 
