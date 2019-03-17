@@ -47,7 +47,7 @@ class MainPresenter private constructor() : MVP.MainPresenterImpl {
         if (listShows.isNotEmpty()) {
             mainView.showData(listShows)
         } else {
-            mainView.setRecyclerAndProgressViewVisibility(View.VISIBLE, View.GONE)
+            setRecyclerAndProgressViewVisibility(View.VISIBLE, View.GONE)
             showMessage("Busca não encontrada!")
         }
     }
@@ -71,6 +71,10 @@ class MainPresenter private constructor() : MVP.MainPresenterImpl {
 
     override fun showMessage(message: String) {
         mainView.showMessage(message)
+    }
+
+    override fun setRecyclerAndProgressViewVisibility(recyclerVisibility: Int, progressVisibility: Int) {
+        mainView.setRecyclerAndProgressViewVisibility(recyclerVisibility, progressVisibility)
     }
 
     override fun loadFavorites(): MutableSet<String> = FavoriteShow.getFavorites(mainView.getActivity())

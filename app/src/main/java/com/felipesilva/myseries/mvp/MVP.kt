@@ -20,6 +20,7 @@ interface MVP {
         fun searchCardShows(search: String)
         fun showMessage(message: String)
         fun loadFavorites(): MutableSet<String>
+        fun setRecyclerAndProgressViewVisibility(recyclerVisibility: Int, progressVisibility: Int)
     }
 
     interface MainModelImpl {

@@ -1,5 +1,6 @@
 package com.felipesilva.myseries.mvp.model
 
+import android.view.View
 import com.felipesilva.myseries.data.Shows
 import com.felipesilva.myseries.mvp.MVP
 import com.felipesilva.myseries.mvp.presenter.MainPresenter
@@ -66,6 +67,7 @@ class MainModel private constructor() : MVP.MainModelImpl {
 
             override fun onFailure(call: Call<MutableList<Shows>>, t: Throwable) {
                 mainPresenter.showMessage("A conexão falhou, tente novamente.")
+                mainPresenter.setRecyclerAndProgressViewVisibility(View.GONE, View.GONE)
             }
         })
     }
