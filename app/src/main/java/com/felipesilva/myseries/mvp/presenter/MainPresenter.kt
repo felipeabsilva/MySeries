@@ -1,20 +1,20 @@
 package com.felipesilva.myseries.mvp.presenter
 
 import android.app.Activity
-import android.util.Log.d
 import android.view.inputmethod.InputMethodManager
-import com.felipesilva.myseries.mvp.view.MainActivity
 import com.felipesilva.myseries.data.Shows
 import com.felipesilva.myseries.features.FavoriteShow
+import com.felipesilva.myseries.mvp.MVP
 import com.felipesilva.myseries.mvp.model.MainModel
+import com.felipesilva.myseries.mvp.view.MainActivity
 
-class MainPresenter private constructor() {
-    private lateinit var mainModel : MainModel
+class MainPresenter private constructor() : MVP.MainPresenterImpl {
+    private lateinit var mainModel: MainModel
     private val listShows = mutableListOf<Shows>()
-    private lateinit var mainView : MainActivity
+    private lateinit var mainView: MVP.MainViewImpl
 
     companion object {
-        private lateinit var mInstance : MainPresenter
+        private lateinit var mInstance: MainPresenter
 
         @Synchronized
         fun initializeInstance() {
@@ -33,25 +33,8 @@ class MainPresenter private constructor() {
         }
     }
 
-    fun initializeModelInstance() {
-        MainModel.initializeInstance()
-        mainModel = MainModel.getInstance()
-    }
-
-    fun setActivity(activity: MainActivity) {
-        mainView = activity
-    }
-
-    fun listCardsShows(){
-        mainModel.loadData()
-    }
-
-    fun searchCardShows(search: String){
-        mainModel.loadDataWithParameter(search)
-    }
-
     @Synchronized
-    fun loadData(shows: MutableList<Shows>?) {
+    override fun loadData(shows: MutableList<Shows>?) {
         if (listShows.isNotEmpty())
             listShows.clear()
 
@@ -60,18 +43,35 @@ class MainPresenter private constructor() {
 
         if (listShows.isNotEmpty()) {
             mainView.showData(listShows)
-            hideKeyboard(mainView)
+            hideKeyboard(mainView.getActivity())
         } else
             showMessage("Busca não encontrada!")
     }
 
-    fun showMessage(message: String) {
+    override fun initializeModelInstance() {
+        MainModel.initializeInstance()
+        mainModel = MainModel.getInstance()
+    }
+
+    override fun setMainActivity(activity: MainActivity) {
+        mainView = activity
+    }
+
+    override fun listCardsShows() {
+        mainModel.loadData()
+    }
+
+    override fun searchCardShows(search: String) {
+        mainModel.loadDataWithParameter(search)
+    }
+
+    override fun showMessage(message: String) {
         mainView.showMessage(message)
     }
 
-    fun loadFavorites() : MutableSet<String> = FavoriteShow.getFavorites(mainView)
+    override fun loadFavorites(): MutableSet<String> = FavoriteShow.getFavorites(mainView.getActivity())
 
-    fun hideKeyboard(activity: Activity) {
+    override fun hideKeyboard(activity: Activity) {
         val view = activity.currentFocus
         view?.let {
             val inputMethodManager = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager

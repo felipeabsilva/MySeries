@@ -1,20 +1,19 @@
 package com.felipesilva.myseries.mvp.model
 
-import android.util.Log
-import android.util.Log.d
-import com.felipesilva.myseries.webClient.service.ApiService
 import com.felipesilva.myseries.data.Shows
+import com.felipesilva.myseries.mvp.MVP
 import com.felipesilva.myseries.mvp.presenter.MainPresenter
 import com.felipesilva.myseries.webClient.RetrofitConfig
+import com.felipesilva.myseries.webClient.service.ApiService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainModel private constructor() {
+class MainModel private constructor() : MVP.MainModelImpl {
     private val mainPresenter = MainPresenter.getInstance()
 
     companion object {
-        private lateinit var mInstance : MainModel
+        private lateinit var mInstance: MainModel
 
         @Synchronized
         fun initializeInstance() {
@@ -34,7 +33,7 @@ class MainModel private constructor() {
     }
 
     @Synchronized
-    fun loadData() {
+    override fun loadData() {
         val retrofit = RetrofitConfig.getInstance()
 
         val api = retrofit.buildRetrofit()
@@ -53,7 +52,7 @@ class MainModel private constructor() {
     }
 
     @Synchronized
-    fun loadDataWithParameter(search: String) {
+    override fun loadDataWithParameter(search: String) {
         val retrofit = RetrofitConfig.getInstance()
 
         val api = retrofit.buildRetrofit()

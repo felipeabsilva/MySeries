@@ -1,6 +1,5 @@
 package com.felipesilva.myseries.mvp.view
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
@@ -9,7 +8,6 @@ import com.bumptech.glide.Glide
 import com.felipesilva.myseries.R
 import com.felipesilva.myseries.features.FavoriteShow
 import kotlinx.android.synthetic.main.details_show.*
-
 
 
 class DetailsShowActivity : AppCompatActivity() {
@@ -57,11 +55,6 @@ class DetailsShowActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupActionBar(it: String) {
-        val actionBar = supportActionBar
-        actionBar?.title = it
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
@@ -70,5 +63,10 @@ class DetailsShowActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun setupActionBar(it: String) {
+        val actionBar = supportActionBar
+        actionBar?.title = it
     }
 }

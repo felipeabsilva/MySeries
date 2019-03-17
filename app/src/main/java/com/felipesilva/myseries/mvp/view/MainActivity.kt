@@ -2,13 +2,11 @@ package com.felipesilva.myseries.mvp.view
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.widget.SearchView
 import android.view.Menu
-import android.view.inputmethod.InputMethodManager
+import android.widget.SearchView
 import android.widget.Toast
 import com.bumptech.glide.GlideBuilder
 import com.bumptech.glide.annotation.GlideModule
@@ -22,7 +20,7 @@ import com.felipesilva.myseries.mvp.presenter.MainPresenter
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), MVP.MainViewImpl {
-    private lateinit var mainPresenter : MainPresenter
+    private lateinit var mainPresenter : MVP.MainPresenterImpl
     private val listShows = mutableListOf<Shows>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,26 +42,6 @@ class MainActivity : AppCompatActivity(), MVP.MainViewImpl {
         super.onResume()
         mainPresenter.loadFavorites()
         reloadData()
-    }
-
-    private fun initializeInstances() {
-        MainPresenter.initializeInstance()
-        mainPresenter = MainPresenter.getInstance()
-        mainPresenter.setActivity(this)
-        mainPresenter.initializeModelInstance()
-    }
-
-    @GlideModule
-    inner class YourAppGlideModule : AppGlideModule() {
-        override fun applyOptions(context: Context, builder: GlideBuilder) {
-            val diskCacheSizeBytes = (1024 * 1024 * 150).toLong() // 100 MB
-            builder.setDiskCache(InternalCacheDiskCacheFactory(context, diskCacheSizeBytes))
-        }
-    }
-
-    fun reloadData() {
-        val recyclerView = recycler_view
-        recyclerView.adapter?.notifyDataSetChanged()
     }
 
     override fun showData(shows: MutableList<Shows>) {
@@ -103,7 +81,31 @@ class MainActivity : AppCompatActivity(), MVP.MainViewImpl {
         return super.onCreateOptionsMenu(menu)
     }
 
-    fun showMessage(message: String) {
+    override fun showMessage(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun getActivity(): Activity = this
+
+    private fun initializeInstances() {
+        MainPresenter.initializeInstance()
+        mainPresenter = MainPresenter.getInstance()
+        mainPresenter.setMainActivity(this)
+        mainPresenter.initializeModelInstance()
+    }
+
+    @GlideModule
+    inner class YourAppGlideModule : AppGlideModule() {
+
+        override fun applyOptions(context: Context, builder: GlideBuilder) {
+            val diskCacheSizeBytes = (1024 * 1024 * 150).toLong() // 100 MB
+            builder.setDiskCache(InternalCacheDiskCacheFactory(context, diskCacheSizeBytes))
+        }
+
+    }
+
+    private fun reloadData() {
+        val recyclerView = recycler_view
+        recyclerView.adapter?.notifyDataSetChanged()
     }
 }

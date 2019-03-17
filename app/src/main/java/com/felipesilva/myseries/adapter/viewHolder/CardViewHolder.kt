@@ -3,7 +3,6 @@ package com.felipesilva.myseries.adapter.viewHolder
 import android.content.Intent
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
-import android.util.Log.d
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -13,10 +12,6 @@ import com.felipesilva.myseries.data.Show
 import com.felipesilva.myseries.features.FavoriteShow
 import com.felipesilva.myseries.mvp.view.DetailsShowActivity
 import kotlinx.android.synthetic.main.card_show.view.*
-import kotlinx.android.synthetic.main.details_show.view.*
-import java.io.File
-import java.io.FileOutputStream
-import java.io.ObjectOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
