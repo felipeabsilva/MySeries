@@ -1,18 +1,17 @@
 package com.felipesilva.myseries.mvp.presenter
 
+import android.app.Activity
 import android.util.Log.d
+import android.view.inputmethod.InputMethodManager
 import com.felipesilva.myseries.mvp.view.MainActivity
 import com.felipesilva.myseries.data.Shows
+import com.felipesilva.myseries.features.FavoriteShow
 import com.felipesilva.myseries.mvp.model.MainModel
-import java.io.File
-import java.io.FileInputStream
-import java.io.ObjectInputStream
 
 class MainPresenter private constructor() {
     private lateinit var mainModel : MainModel
     private val listShows = mutableListOf<Shows>()
     private lateinit var mainView : MainActivity
-    private val listFavorite = mutableSetOf<String>()
 
     companion object {
         private lateinit var mInstance : MainPresenter
@@ -61,7 +60,7 @@ class MainPresenter private constructor() {
 
         if (listShows.isNotEmpty()) {
             mainView.showData(listShows)
-            mainView.hideKeyboard()
+            hideKeyboard(mainView)
         } else
             showMessage("Busca não encontrada!")
     }
@@ -70,27 +69,14 @@ class MainPresenter private constructor() {
         mainView.showMessage(message)
     }
 
-    fun loadFavorites() : MutableSet<String> {
-        val FILE_NAME = "favorite_list"
-        val file : File = mainView.getFileStreamPath(FILE_NAME)
+    fun loadFavorites() : MutableSet<String> = FavoriteShow.getFavorites(mainView)
 
-        if (file.exists()) {
-            val fis = FileInputStream(file)
-            val ois = ObjectInputStream(fis)
-
-            val retorno = ois.readObject() as MutableSet<String>
-
-            if(retorno is MutableSet<String>)
-                if (listFavorite.isNotEmpty()) {
-                    listFavorite.clear()
-                    listFavorite.addAll(retorno)
-                } else
-                    listFavorite.addAll(retorno)
-
-            fis.close()
-            ois.close()
+    fun hideKeyboard(activity: Activity) {
+        val view = activity.currentFocus
+        view?.let {
+            val inputMethodManager = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
         }
-
-        return listFavorite
     }
+
 }

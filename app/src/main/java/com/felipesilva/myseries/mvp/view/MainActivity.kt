@@ -2,10 +2,10 @@ package com.felipesilva.myseries.mvp.view
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log.d
 import android.widget.SearchView
 import android.view.Menu
 import android.view.inputmethod.InputMethodManager
@@ -20,14 +20,10 @@ import com.felipesilva.myseries.data.Shows
 import com.felipesilva.myseries.mvp.MVP
 import com.felipesilva.myseries.mvp.presenter.MainPresenter
 import kotlinx.android.synthetic.main.activity_main.*
-import java.io.File
-import java.io.FileOutputStream
-import java.io.ObjectOutputStream
 
 class MainActivity : AppCompatActivity(), MVP.MainViewImpl {
     private lateinit var mainPresenter : MainPresenter
     private val listShows = mutableListOf<Shows>()
-    private val listFavorite = mutableSetOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,12 +31,19 @@ class MainActivity : AppCompatActivity(), MVP.MainViewImpl {
 
         recycler_view.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = ShowCardAdapter(listShows, listFavorite)
+            adapter = ShowCardAdapter(listShows)
         }
 
         YourAppGlideModule()
         initializeInstances()
         mainPresenter.listCardsShows()
+        mainPresenter.loadFavorites()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mainPresenter.loadFavorites()
+        reloadData()
     }
 
     private fun initializeInstances() {
@@ -58,6 +61,11 @@ class MainActivity : AppCompatActivity(), MVP.MainViewImpl {
         }
     }
 
+    fun reloadData() {
+        val recyclerView = recycler_view
+        recyclerView.adapter?.notifyDataSetChanged()
+    }
+
     override fun showData(shows: MutableList<Shows>) {
         val recyclerView = recycler_view
 
@@ -65,8 +73,6 @@ class MainActivity : AppCompatActivity(), MVP.MainViewImpl {
             listShows.clear()
 
         listShows.addAll(shows)
-        listFavorite.addAll(mainPresenter.loadFavorites())
-        d("123","${listFavorite.size}")
 
         recyclerView.adapter?.notifyDataSetChanged()
     }
@@ -99,13 +105,5 @@ class MainActivity : AppCompatActivity(), MVP.MainViewImpl {
 
     fun showMessage(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-    }
-
-    fun hideKeyboard() {
-        val view = this.currentFocus
-        view?.let {
-            val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
-        }
     }
 }

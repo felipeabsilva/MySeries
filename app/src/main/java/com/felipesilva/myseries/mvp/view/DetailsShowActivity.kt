@@ -1,11 +1,16 @@
 package com.felipesilva.myseries.mvp.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.felipesilva.myseries.R
+import com.felipesilva.myseries.features.FavoriteShow
 import kotlinx.android.synthetic.main.details_show.*
+
+
 
 class DetailsShowActivity : AppCompatActivity() {
 
@@ -38,6 +43,18 @@ class DetailsShowActivity : AppCompatActivity() {
             icon_favorite_show_details.setImageResource(R.drawable.ic_favorite_applied)
         else
             icon_favorite_show_details.setImageResource(R.drawable.ic_favorite_not_applied)
+
+        val imageViewFavorite : ImageView = icon_favorite_show_details
+
+        imageViewFavorite.setOnClickListener {
+            if (FavoriteShow.isFavorite(title)) {
+                FavoriteShow.removeFavorite(title, it.context)
+                imageViewFavorite.setImageResource(R.drawable.ic_favorite_not_applied)
+            } else {
+                FavoriteShow.addFavorite(title, it.context)
+                imageViewFavorite.setImageResource(R.drawable.ic_favorite_applied)
+            }
+        }
     }
 
     private fun setupActionBar(it: String) {
@@ -54,6 +71,4 @@ class DetailsShowActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
-
 }
