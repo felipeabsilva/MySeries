@@ -1,74 +1,27 @@
 package com.felipesilva.myseries.mvp.model
 
-import android.view.View
-import com.felipesilva.myseries.data.Shows
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.felipesilva.myseries.data.db.TvMazeDatabase
+import com.felipesilva.myseries.data.model.Show
+import com.felipesilva.myseries.data.model.Shows
 import com.felipesilva.myseries.mvp.MVP
-import com.felipesilva.myseries.mvp.presenter.MainPresenter
-import com.felipesilva.myseries.webClient.RetrofitConfig
-import com.felipesilva.myseries.webClient.service.ApiService
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
-class MainModel private constructor() : MVP.MainModelImpl {
-    private val mainPresenter = MainPresenter.getInstance()
+class MainModel (val tvMazeDatabase: TvMazeDatabase) : MVP.MainModelImpl {
+    private val seriesList = mutableListOf<Shows>()
+    private val series = MutableLiveData<List<Shows>>()
 
-    companion object {
-        private lateinit var mInstance: MainModel
+    override fun makeCallSeriesList(name: String) {
+        tvMazeDatabase.makeCallSeriesList(name)
 
-        @Synchronized
-        fun initializeInstance() {
-            if (!::mInstance.isInitialized) {
-                mInstance = MainModel()
-            }
-        }
+        tvMazeDatabase.getSeriesList().observeForever { mSeries ->
+            if (seriesList.isNotEmpty())
+                seriesList.clear()
 
-        @JvmStatic
-        @Synchronized
-        fun getInstance(): MainModel {
-            if (!::mInstance.isInitialized) {
-                throw IllegalStateException(MainPresenter::class.java.simpleName + " is not initialized, call initializeInstance(..) method first.")
-            }
-            return mInstance
+            seriesList.addAll(mSeries)
+            series.value = seriesList
         }
     }
 
-    @Synchronized
-    override fun loadData() {
-        val retrofit = RetrofitConfig.getInstance()
-
-        val api = retrofit.buildRetrofit()
-            .create(ApiService::class.java)
-
-
-        api.search().enqueue(object : Callback<MutableList<Shows>> {
-            override fun onResponse(call: Call<MutableList<Shows>>, response: Response<MutableList<Shows>>) {
-                mainPresenter.loadData(response.body())
-            }
-
-            override fun onFailure(call: Call<MutableList<Shows>>, t: Throwable) {
-                mainPresenter.showMessage("A conexão falhou, tente novamente.")
-            }
-        })
-    }
-
-    @Synchronized
-    override fun loadDataWithParameter(search: String) {
-        val retrofit = RetrofitConfig.getInstance()
-
-        val api = retrofit.buildRetrofit()
-            .create(ApiService::class.java)
-
-
-        api.searchParameter(search).enqueue(object : Callback<MutableList<Shows>> {
-            override fun onResponse(call: Call<MutableList<Shows>>, response: Response<MutableList<Shows>>) {
-                mainPresenter.loadData(response.body())
-            }
-
-            override fun onFailure(call: Call<MutableList<Shows>>, t: Throwable) {
-                mainPresenter.showMessage("A conexão falhou, tente novamente.")
-                mainPresenter.setRecyclerAndProgressViewVisibility(View.GONE, View.GONE)
-            }
-        })
-    }
+    override fun getSeriesList(): LiveData<List<Shows>> = series
 }

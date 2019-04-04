@@ -1,26 +1,24 @@
 package com.felipesilva.myseries.adapter.viewHolder
 
 import android.content.Intent
-import android.support.v7.widget.CardView
-import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.felipesilva.myseries.R
-import com.felipesilva.myseries.data.Show
+import com.felipesilva.myseries.data.model.Show
 import com.felipesilva.myseries.features.FavoriteShow
 import com.felipesilva.myseries.mvp.view.DetailsShowActivity
 import kotlinx.android.synthetic.main.card_show.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class CardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    val cardView : CardView = itemView.card_show
-    val imageViewPoster: ImageView = itemView.image_show_poster
-    val textViewTitle: TextView = itemView.text_show_title
-    val textViewGenres: TextView = itemView.text_show_genres
-    val imageViewFavorite: ImageView = itemView.icon_favorite_show
+class CardViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
+    private val cardView : androidx.cardview.widget.CardView = itemView.card_show
+    private val imageViewPoster: ImageView = itemView.image_show_poster
+    private val textViewTitle: TextView = itemView.text_show_title
+    private val textViewGenres: TextView = itemView.text_show_genres
+    private val imageViewFavorite: ImageView = itemView.icon_favorite_show
 
     fun bind(show: Show) {
         textViewTitle.text = show.name
@@ -84,7 +82,7 @@ class CardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         return format.format(date)
     }
 
-    private fun formatGenres(genres: MutableList<String>) : String {
+    private fun formatGenres(genres: List<String>) : String {
         val formattedGenres = StringBuilder()
 
         if (genres.isNotEmpty()) {

@@ -1,17 +1,9 @@
-package com.felipesilva.myseries.webClient
+package com.felipesilva.myseries.data.remote.retrofit
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitConfig private constructor() {
-
-    companion object {
-        private val mInstance = RetrofitConfig()
-
-        @Synchronized
-        fun getInstance() = mInstance
-    }
-
+class RetrofitConfig() {
     fun buildRetrofit() = Retrofit.Builder()
             .baseUrl("http://api.tvmaze.com/search/")
             .addConverterFactory(GsonConverterFactory.create())

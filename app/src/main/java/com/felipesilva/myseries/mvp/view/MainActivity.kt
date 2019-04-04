@@ -1,76 +1,58 @@
 package com.felipesilva.myseries.mvp.view
 
-import android.app.Activity
-import android.content.Context
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
+import android.util.Log.d
 import android.view.Menu
 import android.view.View
 import android.widget.SearchView
 import android.widget.Toast
-import com.bumptech.glide.GlideBuilder
-import com.bumptech.glide.annotation.GlideModule
-import com.bumptech.glide.load.engine.cache.InternalCacheDiskCacheFactory
-import com.bumptech.glide.module.AppGlideModule
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.felipesilva.myseries.R
 import com.felipesilva.myseries.adapter.ShowCardAdapter
-import com.felipesilva.myseries.data.Shows
 import com.felipesilva.myseries.mvp.MVP
-import com.felipesilva.myseries.mvp.presenter.MainPresenter
 import kotlinx.android.synthetic.main.activity_main.*
+import org.kodein.di.Kodein
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.closestKodein
+import org.kodein.di.generic.instance
 
-class MainActivity : AppCompatActivity(), MVP.MainViewImpl {
-    private lateinit var mainPresenter : MVP.MainPresenterImpl
-    private val listShows = mutableListOf<Shows>()
+class MainActivity : AppCompatActivity(), MVP.MainViewImpl, KodeinAware {
+    override val kodein: Kodein by closestKodein()
+    private val mainPresenter : MVP.MainPresenterImpl by instance()
     private lateinit var searchView: SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        initializeUI()
+        //YourAppGlideModule()
+    }
+
+    private fun initializeUI() {
         recycler_view.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = ShowCardAdapter(listShows)
+            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this@MainActivity)
+
+            mainPresenter.getSeriesList().observe(this@MainActivity, Observer {
+                adapter = ShowCardAdapter(mainPresenter.getSeriesList())
+            })
         }
-
-        YourAppGlideModule()
-        initializeInstances()
-        mainPresenter.listCardsShows()
-        mainPresenter.loadFavorites()
     }
 
-    override fun onResume() {
-        super.onResume()
-        mainPresenter.loadFavorites()
-        reloadData()
-    }
-
-    override fun showData(shows: MutableList<Shows>) {
-        if (listShows.isNotEmpty())
-            listShows.clear()
-
-        listShows.addAll(shows)
-        searchView.onActionViewCollapsed()
-
-        setRecyclerAndProgressViewVisibility(View.VISIBLE, View.GONE)
-        recycler_view.adapter?.notifyDataSetChanged()
-    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_search, menu)
 
         val searchItem = menu.findItem(R.id.search_button_menu)
 
-        searchItem?.let {
+         searchItem.let {
             searchView = searchItem.actionView as SearchView
             searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     query?.let {
-                        setRecyclerAndProgressViewVisibility(View.GONE, View.VISIBLE)
-                        mainPresenter.searchCardShows(query)
+                        mainPresenter.makeCallSeriesList(query)
                     }
-
                     return true
                 }
 
@@ -88,28 +70,15 @@ class MainActivity : AppCompatActivity(), MVP.MainViewImpl {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
-    override fun getActivity(): Activity = this
-
-    private fun initializeInstances() {
-        MainPresenter.initializeInstance()
-        mainPresenter = MainPresenter.getInstance()
-        mainPresenter.setMainActivity(this)
-        mainPresenter.initializeModelInstance()
-    }
-
+    /*
     @GlideModule
     inner class YourAppGlideModule : AppGlideModule() {
-
         override fun applyOptions(context: Context, builder: GlideBuilder) {
             val diskCacheSizeBytes = (1024 * 1024 * 150).toLong() // 100 MB
             builder.setDiskCache(InternalCacheDiskCacheFactory(context, diskCacheSizeBytes))
         }
-
     }
-
-    private fun reloadData() {
-        recycler_view.adapter?.notifyDataSetChanged()
-    }
+    */
 
     override fun setRecyclerAndProgressViewVisibility(recyclerVisibility: Int, progressVisibility: Int) {
         recycler_view.visibility = recyclerVisibility
