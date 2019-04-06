@@ -1,30 +1,24 @@
 package com.felipesilva.myseries.mvp
 
 import android.app.Activity
-import com.felipesilva.myseries.data.Shows
+import androidx.lifecycle.LiveData
+import com.felipesilva.myseries.data.model.Show
+import com.felipesilva.myseries.data.model.Shows
 import com.felipesilva.myseries.mvp.view.MainActivity
 
 interface MVP {
     interface MainViewImpl {
-        fun getActivity() : Activity
-        fun showData(shows: MutableList<Shows>)
         fun showMessage(message: String)
         fun setRecyclerAndProgressViewVisibility(recyclerVisibility: Int, progressVisibility: Int)
     }
 
     interface MainPresenterImpl {
-        fun loadData(shows: MutableList<Shows>?)
-        fun initializeModelInstance()
-        fun setMainActivity(activity: MainActivity)
-        fun listCardsShows()
-        fun searchCardShows(search: String)
-        fun showMessage(message: String)
-        fun loadFavorites(): MutableSet<String>
-        fun setRecyclerAndProgressViewVisibility(recyclerVisibility: Int, progressVisibility: Int)
+        fun getSeriesList() : LiveData<List<Shows>>
+        fun makeCallSeriesList(name: String)
     }
 
     interface MainModelImpl {
-        fun loadData()
-        fun loadDataWithParameter(search: String)
+        fun getSeriesList() : LiveData<List<Shows>>
+        fun makeCallSeriesList(name: String)
     }
 }
